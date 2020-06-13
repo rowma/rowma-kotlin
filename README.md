@@ -1,4 +1,6 @@
 # Rowma Kotlin SDK
+[ ![Download](https://api.bintray.com/packages/asmsuechan/rowma/rowma-kotlin/images/download.svg) ](https://bintray.com/asmsuechan/rowma/rowma-kotlin/_latestVersion)
+
 We can build Android app of Rowma.
 
 ## Install
