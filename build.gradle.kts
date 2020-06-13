@@ -2,7 +2,7 @@ import org.gradle.jvm.tasks.Jar
 import com.jfrog.bintray.gradle.BintrayExtension
 
 group = "com.rowma.rowma-kotlin"
-version = "0.0.1"
+version = "0.0.3"
 val artifactID = "rowma-kotlin"
 val publicationName = "default"
 
@@ -18,10 +18,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("io.socket:socket.io-client:1.0.0") {
-        exclude(group = "org.json", module = "json")
-    }
-    implementation("org.json:json:20200518")
+    implementation("io.socket:socket.io-client:1.0.0")
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
