@@ -7,7 +7,7 @@ We can build Android app of Rowma.
 Just put this line to `dependencies` in `build.gradle`.
 
 ```
-implementation 'com.rowma.rowma-kotlin:rowma-kotlin:0.0.1'
+implementation 'com.rowma.rowma-kotlin:rowma-kotlin:0.0.3'
 ```
 
 ## Usage
