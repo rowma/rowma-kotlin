@@ -1,7 +1,7 @@
 <project>
     <groupId>com.rowma</groupId>
     <artifactId>rowma-kotlin</artifactId>
-    <version>0.0.20</version>
+    <version>0.0.1</version>
 
     <packaging>jar</packaging>
 
