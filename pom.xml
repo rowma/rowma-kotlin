@@ -1,0 +1,10 @@
+<project>
+    <groupId>com.rowma</groupId>
+    <artifactId>rowma-kotlin</artifactId>
+    <version>0.0.20</version>
+
+    <packaging>jar</packaging>
+
+    <name>rowma-kotlin</name>
+    <url>https://github.com/rowma/rowma-kotlin</url>
+</project>
