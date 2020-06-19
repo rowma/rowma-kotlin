@@ -113,7 +113,7 @@ class Rowma (url: String) {
         )
     }
 
-    fun publish (uuid: String, topic: String, msg: String) {
+    fun publish (uuid: String, topic: String, msg: Any) {
         val topicMessage = JSONObject()
         topicMessage.put("op", "publish")
         topicMessage.put("topic", topic)
