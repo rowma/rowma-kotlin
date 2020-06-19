@@ -7,7 +7,7 @@ We can build Android app of Rowma.
 Just put this line to `dependencies` in `build.gradle`.
 
 ```
-implementation 'com.rowma.rowma-kotlin:rowma-kotlin:0.0.3'
+implementation 'com.rowma.rowma-kotlin:rowma-kotlin:+'
 ```
 
 ## Usage
@@ -32,7 +32,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         rowma.connect()
-        rowma.publish("df0c5509-2464-4bbf-9064-2d0bc7f56102", "/chatter", "test message")
+        val msg = JSONObject()
+        msg.put("data", "test message")
+        rowma.publish("df0c5509-2464-4bbf-9064-2d0bc7f56102", "/chatter", msg)
         getCurrentRobots()
     }
 
