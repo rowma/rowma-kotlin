@@ -132,7 +132,7 @@ class Rowma (url: String) {
         )
     }
 
-    fun setTopicRoute(destUuid: String, topicDestType: String, topicDestUuid: String, topic: String) {
+    fun setTopicRoute(destUuid: String, topicDestType: String, topicDestUuid: String, topic: String, alias: String?) {
         val destination = JSONObject()
         destination.put("type", "robot")
         destination.put("uuid", destUuid)
@@ -145,6 +145,7 @@ class Rowma (url: String) {
         msg.put("op", "subscribe")
         msg.put("topicDestination", topicDestination)
         msg.put("topic", topic)
+        if (alias != null) msg.put("alias", alias)
 
         val payload = JSONObject()
         payload.put("destination", destination)
