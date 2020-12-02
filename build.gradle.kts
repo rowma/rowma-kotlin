@@ -2,7 +2,7 @@ import org.gradle.jvm.tasks.Jar
 import com.jfrog.bintray.gradle.BintrayExtension
 
 group = "com.rowma.rowma-kotlin"
-version = "0.0.4"
+version = "1.0.0"
 val artifactID = "rowma-kotlin"
 val publicationName = "default"
 
