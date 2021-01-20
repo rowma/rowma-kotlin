@@ -1,4 +1,4 @@
-package com.example.rowmaexample
+package com.rowma.rowma_kotlin
 
 import io.socket.client.Ack
 import io.socket.client.IO
