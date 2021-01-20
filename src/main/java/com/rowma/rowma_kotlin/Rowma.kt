@@ -1,4 +1,4 @@
-package com.rowma.rowma_kotlin
+package com.example.rowmaexample
 
 import io.socket.client.Ack
 import io.socket.client.IO
@@ -15,7 +15,7 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
     val url : String = url;
     var socket: Socket;
     val uuid: String = uuid;
-    private var handlers : MutableMap<String, () -> Unit> = mutableMapOf();
+    private var handlers : MutableMap<String, (data: Any) -> Unit> = mutableMapOf();
 
     object HttpClient {
         val instance = OkHttpClient()
@@ -33,11 +33,9 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
             registerApplication()
         }.on(Socket.EVENT_DISCONNECT) {
             println("disconnected")
-        }.on("topic_to_application") { parameters ->
-            print("")
         }
-        socket.connect()
         socket.on("topic_to_application", baseHandler)
+        socket.connect()
     }
 
     fun close () {
@@ -47,8 +45,8 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
     fun currentConnectionList(networkUuid: String = "default"): JSONArray {
         val baseUrl = "$url/list_connections?uuid=$networkUuid"
         val request = Request.Builder()
-            .url(baseUrl)
-            .build()
+                .url(baseUrl)
+                .build()
 
         val response = HttpClient.instance.newCall(request).execute()
         val body = response.body()?.string()
@@ -58,9 +56,9 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
     fun getRobotStatus(uuid: String, networkUuid: String = "default", jwt: String = "") : JSONObject {
         val baseUrl = "$url/robots?uuid=$uuid&networkUuid=$networkUuid"
         val request = Request.Builder()
-            .url(baseUrl)
-            .addHeader("Authorization", jwt)
-            .build()
+                .url(baseUrl)
+                .addHeader("Authorization", jwt)
+                .build()
 
         val response = HttpClient.instance.newCall(request).execute()
         val body = response.body()?.string()
@@ -161,7 +159,7 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
         )
     }
 
-    fun subscribe(topic: String, handler: () -> Unit) {
+    fun subscribe(topic: String, handler: (data: Any) -> Unit) {
         handlers[topic] = handler;
     }
 
@@ -179,7 +177,7 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
         val data = args[0] as JSONObject
         val handler = handlers[data["topic"]]
         if (handler != null) {
-            handler()
+            handler(data)
         }
     }
 }
