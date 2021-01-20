@@ -3,13 +3,15 @@ package com.rowma.rowma_kotlin
 import io.socket.client.Ack
 import io.socket.client.IO
 import io.socket.client.Socket
+import io.socket.emitter.Emitter
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 
-class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.randomUUID().toString()) {
+
+class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.randomUUID().toString()) {
     val url : String = url;
     var socket: Socket;
     val uuid: String = uuid;
@@ -23,7 +25,7 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         val options = IO.Options()
         options.transports = arrayOf("websocket");
         val mSocket = IO.socket(url, options)
-        socket = Socket(mSocket.io(),"/rowma", null)
+        socket = Socket(mSocket.io(), "/rowma", null)
     }
 
     fun connect () {
@@ -35,13 +37,14 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
             print("")
         }
         socket.connect()
+        socket.on("topic_to_application", baseHandler)
     }
 
     fun close () {
         socket.close()
     }
 
-    fun currentConnectionList (networkUuid : String = "default"): JSONArray {
+    fun currentConnectionList(networkUuid: String = "default"): JSONArray {
         val baseUrl = "$url/list_connections?uuid=$networkUuid"
         val request = Request.Builder()
             .url(baseUrl)
@@ -52,7 +55,7 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         return JSONArray(body)
     }
 
-    fun getRobotStatus (uuid: String, networkUuid: String = "default", jwt: String = "") : JSONObject {
+    fun getRobotStatus(uuid: String, networkUuid: String = "default", jwt: String = "") : JSONObject {
         val baseUrl = "$url/robots?uuid=$uuid&networkUuid=$networkUuid"
         val request = Request.Builder()
             .url(baseUrl)
@@ -64,7 +67,7 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         return JSONObject(body)
     }
 
-    fun runLaunch (uuid: String, command: String) {
+    fun runLaunch(uuid: String, command: String) {
         val destination = JSONObject()
         destination.put("type", "robot")
         destination.put("uuid", uuid)
@@ -74,9 +77,9 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         payload.put("command", command)
 
         socket.emit(
-            "run_launch",
-            payload,
-            Ack { }
+                "run_launch",
+                payload,
+                Ack { }
         )
     }
 
@@ -91,9 +94,9 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         payload.put("args", args)
 
         socket.emit(
-            "run_rosrun",
-            payload,
-            Ack { }
+                "run_rosrun",
+                payload,
+                Ack { }
         )
     }
 
@@ -107,13 +110,13 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         payload.put("rosnodes", rosnodes)
 
         socket.emit(
-            "kill_rosnodes",
-            payload,
-            Ack { }
+                "kill_rosnodes",
+                payload,
+                Ack { }
         )
     }
 
-    fun publish (uuid: String, topic: String, msg: Any) {
+    fun publish(uuid: String, topic: String, msg: Any) {
         val topicMessage = JSONObject()
         topicMessage.put("op", "publish")
         topicMessage.put("topic", topic)
@@ -126,9 +129,9 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         payload.put("msg", topicMessage)
 
         socket.emit(
-            "topic_transfer",
-            payload,
-            Ack { }
+                "topic_transfer",
+                payload,
+                Ack { }
         )
     }
 
@@ -152,24 +155,29 @@ class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.r
         payload.put("msg", msg)
 
         socket.emit(
-            "topic_transfer",
-            payload,
-            Ack { }
+                "topic_transfer",
+                payload,
+                Ack { }
         )
+    }
+
+    fun subscribe(topic: String, handler: () -> Void) {
+        handlers[topic] = handler;
     }
 
     private fun registerApplication () {
         val payload = JSONObject()
         payload.put("applicationUuid", this.uuid)
         socket.emit(
-            "register_application",
-            payload,
-            Ack { }
+                "register_application",
+                payload,
+                Ack { }
         )
     }
 
-    private fun baseHandler(topic: String) {
-        val handler = handlers[topic]
+    private val baseHandler = Emitter.Listener { args ->
+        val data = args[0] as JSONObject
+        val handler = handlers[data["topic"]]
         if (handler != null) {
             handler()
         }
