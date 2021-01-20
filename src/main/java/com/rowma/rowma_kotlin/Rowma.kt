@@ -15,7 +15,7 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
     val url : String = url;
     var socket: Socket;
     val uuid: String = uuid;
-    private var handlers : MutableMap<String, () -> Void> = mutableMapOf();
+    private var handlers : MutableMap<String, () -> Unit> = mutableMapOf();
 
     object HttpClient {
         val instance = OkHttpClient()
@@ -161,7 +161,7 @@ class Rowma(url: String = "https://rowma.moriokalab.com", uuid: String = UUID.ra
         )
     }
 
-    fun subscribe(topic: String, handler: () -> Void) {
+    fun subscribe(topic: String, handler: () -> Unit) {
         handlers[topic] = handler;
     }
 
