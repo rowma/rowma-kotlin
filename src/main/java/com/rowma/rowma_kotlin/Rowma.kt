@@ -9,10 +9,10 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.util.*
 
-class Rowma (url: String) {
+class Rowma (url: String = "https://rowma.moriokalab.com", uuid: String = UUID.randomUUID().toString()) {
     val url : String = url;
     var socket: Socket;
-    val uuid : String = UUID.randomUUID().toString()
+    val uuid: String = uuid;
     private var handlers : MutableMap<String, () -> Void> = mutableMapOf();
 
     object HttpClient {

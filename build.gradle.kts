@@ -19,6 +19,15 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("io.socket:socket.io-client:1.0.0")
+    testImplementation(platform("org.junit:junit-bom:5.7.0"))
+    testImplementation("org.junit.jupiter:junit-jupiter")
+}
+
+tasks.test {
+    useJUnitPlatform()
+    testLogging {
+        events("passed", "skipped", "failed")
+    }
 }
 
 val sourcesJar by tasks.registering(Jar::class) {
