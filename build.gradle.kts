@@ -19,8 +19,10 @@ repositories {
 dependencies {
     implementation(kotlin("stdlib"))
     implementation("io.socket:socket.io-client:1.0.0")
+    implementation("com.github.nazmulidris:color-console:1.0.0")
     testImplementation(platform("org.junit:junit-bom:5.7.0"))
     testImplementation("org.junit.jupiter:junit-jupiter")
+    
 }
 
 tasks.test {
@@ -68,4 +70,9 @@ bintray {
         setLicenses("MIT")
         desc = description
     })
+}
+repositories {
+  maven{
+    url = uri("https://jitpack.io")
+  }
 }
